@@ -1,5 +1,8 @@
 package com.pstrycz.draysonhospitals;
 
+import android.app.DownloadManager;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,6 +18,7 @@ import android.widget.RelativeLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,6 +28,14 @@ public class MainActivity extends AppCompatActivity {
     ListView hospitalsListView;
     @BindView(R.id.empty_view)
     LinearLayout emptyView;
+
+    @OnClick(R.id.download_button)
+    public void onDownloadButtonClick() {
+        DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+        DownloadManager.Request request = new DownloadManager.Request(
+                Uri.parse("https://data.gov.uk/data/resource/nhschoices/Hospital.csv"));
+        downloadManager.enqueue(request);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
