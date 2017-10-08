@@ -4,6 +4,9 @@ import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
+
+import java.io.File;
 
 import static android.app.DownloadManager.ACTION_DOWNLOAD_COMPLETE;
 import static android.app.DownloadManager.ACTION_NOTIFICATION_CLICKED;
@@ -18,7 +21,8 @@ public class DownloadReceiver extends BroadcastReceiver {
         String action = intent.getAction();
         switch (action) {
             case ACTION_DOWNLOAD_COMPLETE:
-                //TODO parse CSV
+                File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                path.listFiles();
                 break;
             case ACTION_NOTIFICATION_CLICKED:
                 //TODO if needed

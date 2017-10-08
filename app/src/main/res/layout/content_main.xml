@@ -34,10 +34,11 @@
             android:text="@string/empty_view_title_text"
             android:textAppearance="?android:textAppearanceMedium" />
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/download_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorAccent"
             android:fontFamily="sans-serif"
             android:paddingTop="8dp"
             android:text="@string/empty_view_button_text"

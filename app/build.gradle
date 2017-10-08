@@ -46,6 +46,8 @@ dependencies {
     annotationProcessor 'org.parceler:parceler:' + rootProject.parcelerVersion
 
     //Utils
+    compile 'net.sf.supercsv:super-csv:2.4.0'
+    compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.annimon:stream:1.1.9'
     compile 'com.android.support:multidex:1.0.1'
 }
