@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Environment;
 import android.util.Log;
 
-import com.pstrycz.draysonhospitals.utils.Constants;
 import com.pstrycz.draysonhospitals.utils.ParseCsvUtil;
 
 import java.io.File;

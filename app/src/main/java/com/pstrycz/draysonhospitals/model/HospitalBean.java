@@ -24,7 +24,7 @@ public class HospitalBean {
     String Website;
     String Fax;
 
-    public HospitalBean(){}
+    public HospitalBean() {}
 
     public HospitalBean(String organisationID, String organisationCode, String organisationType, String subType,
                         String sector, String organisationStatus, String isPimsManaged, String organisationName,
