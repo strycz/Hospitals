@@ -2,7 +2,6 @@ package com.pstrycz.draysonhospitals;
 
 import android.Manifest;
 import android.app.DownloadManager;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -14,11 +13,14 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.pstrycz.draysonhospitals.database.HospitalContract.HospitalEntry;
+import com.pstrycz.draysonhospitals.ui.HospitalListAdapter;
 import com.pstrycz.draysonhospitals.utils.Constants;
 
 import butterknife.BindView;
@@ -36,13 +38,6 @@ public class MainActivity extends AppCompatActivity {
     ListView hospitalsListView;
     @BindView(R.id.empty_view)
     LinearLayout emptyView;
-    @BindView(R.id.displayTextView)
-    TextView displayTextView;
-
-    @OnClick(R.id.showButton)
-    public void onShowClick() {
-        displayData();
-    }
 
     @OnClick(R.id.download_button)
     public void onDownloadButtonClick() {
@@ -52,15 +47,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void displayData() {
-        String[] projection = {HospitalEntry._ID, HospitalEntry.ORGANISATIONID, HospitalEntry.ORGANISATIONCODE,
-                HospitalEntry.ORGANISATIONTYPE, HospitalEntry.SUBTYPE};
+        String[] projection = {HospitalEntry._ID, HospitalEntry.ORGANISATIONNAME, HospitalEntry.CITY};
 
         Cursor cursor = getContentResolver().query(HospitalEntry.CONTENT_URI, projection, null, null, null);
-        displayTextView.setText("" + cursor.getCount());
-        while (cursor.moveToNext()) {
-            displayTextView.append(cursor.getString(cursor.getColumnIndex(HospitalEntry.ORGANISATIONID)));
-            displayTextView.append("\n");
-        }
+
+        HospitalListAdapter hospitalListAdapter = new HospitalListAdapter(this, cursor, true);
+        hospitalsListView.setAdapter(hospitalListAdapter);
     }
 
     private boolean checkDownloadPermission() {
@@ -98,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, Constants.CSV_NAME);
         downloadManager.enqueue(request);
 
-//        showDownload();
     }
 
     public void showDownload() {
@@ -115,15 +106,22 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
         hospitalsListView.setEmptyView(emptyView);
+
     }
 
-    private void insertDummyData() {
-        ContentValues values = new ContentValues();
-        values.put(HospitalEntry.ORGANISATIONID, "Toto");
-        values.put(HospitalEntry.ORGANISATIONCODE, "Terrier");
-        values.put(HospitalEntry.ORGANISATIONTYPE, "TEST");
-        values.put(HospitalEntry.SUBTYPE, "7");
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_item, menu);
+        return true;
+    }
 
-        Uri insert = getContentResolver().insert(HospitalEntry.CONTENT_URI, values);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_display_data:
+                displayData();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

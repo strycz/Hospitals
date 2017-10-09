@@ -3,4 +3,7 @@
     <color name="colorPrimary">#7B1FA2</color>
     <color name="colorPrimaryDark">#4A148C</color>
     <color name="colorAccent">#F44336</color>
+
+    <color name="listItemNameColor">#2B3D4D</color>
+    <color name="listItemCityColor">#AEB6BD</color>
 </resources>

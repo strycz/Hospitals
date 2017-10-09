@@ -8,7 +8,7 @@ import com.pstrycz.draysonhospitals.database.HospitalContract.HospitalEntry;
 
 public class HospitalDbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "hospitals.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;
 
     public HospitalDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
