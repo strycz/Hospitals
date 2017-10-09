@@ -32,6 +32,11 @@
             </intent-filter>
         </receiver>
 
+        <provider
+            android:authorities="com.pstrycz.draysonhospitals"
+            android:name=".data.PetProvider"
+            android:exported="false"/>
+
     </application>
 
 </manifest>
