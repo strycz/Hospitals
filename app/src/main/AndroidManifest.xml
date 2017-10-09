@@ -34,7 +34,7 @@
 
         <provider
             android:authorities="com.pstrycz.draysonhospitals"
-            android:name=".data.PetProvider"
+            android:name=".database.HospitalProvider"
             android:exported="false"/>
 
     </application>

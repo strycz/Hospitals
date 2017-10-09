@@ -8,6 +8,8 @@ import android.util.Log;
 
 import com.pstrycz.draysonhospitals.utils.ParseCsvUtil;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -24,8 +26,9 @@ public class DownloadReceiver extends BroadcastReceiver {
         switch (action) {
             case ACTION_DOWNLOAD_COMPLETE:
                 File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+
                 try {
-                    ParseCsvUtil.parseCsv(path);
+                    ParseCsvUtil.parseCsv(context, path);
                 } catch (IOException e) {
                     Log.v(TAG, "CSV parsing error");
                     e.printStackTrace();

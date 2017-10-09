@@ -2,8 +2,10 @@ package com.pstrycz.draysonhospitals;
 
 import android.Manifest;
 import android.app.DownloadManager;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,7 +16,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.pstrycz.draysonhospitals.database.HospitalContract.HospitalEntry;
 import com.pstrycz.draysonhospitals.utils.Constants;
 
 import butterknife.BindView;
@@ -32,11 +36,30 @@ public class MainActivity extends AppCompatActivity {
     ListView hospitalsListView;
     @BindView(R.id.empty_view)
     LinearLayout emptyView;
+    @BindView(R.id.displayTextView)
+    TextView displayTextView;
+
+    @OnClick(R.id.showButton)
+    public void onShowClick() {
+        displayData();
+    }
 
     @OnClick(R.id.download_button)
     public void onDownloadButtonClick() {
         if (checkDownloadPermission()) {
             resumeDownload();
+        }
+    }
+
+    private void displayData() {
+        String[] projection = {HospitalEntry._ID, HospitalEntry.ORGANISATIONID, HospitalEntry.ORGANISATIONCODE,
+                HospitalEntry.ORGANISATIONTYPE, HospitalEntry.SUBTYPE};
+
+        Cursor cursor = getContentResolver().query(HospitalEntry.CONTENT_URI, projection, null, null, null);
+        displayTextView.setText("" + cursor.getCount());
+        while (cursor.moveToNext()) {
+            displayTextView.append(cursor.getString(cursor.getColumnIndex(HospitalEntry.ORGANISATIONID)));
+            displayTextView.append("\n");
         }
     }
 
@@ -70,12 +93,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void resumeDownload() {
         DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse("https://data.gov" + "" +
-                ".uk/data/resource/nhschoices/Hospital.csv"));
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse("https://data.gov" + "" + "" + "" +
+                "" + ".uk/data/resource/nhschoices/Hospital.csv"));
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, Constants.CSV_NAME);
         downloadManager.enqueue(request);
 
-        showDownload();
+//        showDownload();
     }
 
     public void showDownload() {
@@ -92,5 +115,15 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
         hospitalsListView.setEmptyView(emptyView);
+    }
+
+    private void insertDummyData() {
+        ContentValues values = new ContentValues();
+        values.put(HospitalEntry.ORGANISATIONID, "Toto");
+        values.put(HospitalEntry.ORGANISATIONCODE, "Terrier");
+        values.put(HospitalEntry.ORGANISATIONTYPE, "TEST");
+        values.put(HospitalEntry.SUBTYPE, "7");
+
+        Uri insert = getContentResolver().insert(HospitalEntry.CONTENT_URI, values);
     }
 }

@@ -18,7 +18,7 @@ public class HospitalDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         String SQL_CREATE_TABLE =  "CREATE TABLE " + HospitalEntry.TABLE_NAME + " ("
-                + HospitalEntry._ID +  "INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + HospitalEntry._ID +  " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + HospitalEntry.ORGANISATIONID + " INTEGER NOT NULL, "
                 + HospitalEntry.ORGANISATIONCODE + " TEXT, "
                 + HospitalEntry.ORGANISATIONTYPE + " TEXT, "

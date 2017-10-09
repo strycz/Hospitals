@@ -1,7 +1,10 @@
 package com.pstrycz.draysonhospitals.utils;
 
+import android.content.ContentValues;
+import android.content.Context;
 import android.util.Log;
 
+import com.pstrycz.draysonhospitals.database.HospitalContract.HospitalEntry;
 import com.pstrycz.draysonhospitals.model.HospitalBean;
 
 import org.supercsv.io.CsvBeanReader;
@@ -15,7 +18,7 @@ import java.io.IOException;
 public class ParseCsvUtil {
     private static final String TAG = ParseCsvUtil.class.getSimpleName();
 
-    public static void parseCsv(File file) throws IOException {
+    public static void parseCsv(Context context, File file) throws IOException {
         ICsvBeanReader beanReader = null;
         try {
             File csvFile = new File(file + "/" + Constants.CSV_NAME);
@@ -25,10 +28,12 @@ public class ParseCsvUtil {
             header = beanReader.getHeader(true);
 
             HospitalBean hospital;
+
             while ((hospital = beanReader.read(HospitalBean.class, header)) != null) {
-                Log.v(TAG, String.format("lineNo=%s, rowNo=%s, customer=%s", beanReader.getLineNumber(), beanReader
-                        .getRowNumber(), hospital));
+                ContentValues values = hospital.toContentValues();
+                context.getContentResolver().insert(HospitalEntry.CONTENT_URI, values);
             }
+
         } finally {
             if (beanReader != null) {
                 beanReader.close();
