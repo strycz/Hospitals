@@ -4,4 +4,7 @@
     <string name="action_settings">Settings</string>
     <string name="empty_view_title_text">no data yet...</string>
     <string name="empty_view_button_text">Download Hospitals Data</string>
+    <string name="sector">Sector</string>
+    <string name="subtype">SubType</string>
+    <string name="is_pims_managed">Is Pims Managed?</string>
 </resources>
