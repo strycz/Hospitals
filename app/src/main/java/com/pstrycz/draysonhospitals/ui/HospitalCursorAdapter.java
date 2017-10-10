@@ -12,9 +12,9 @@ import com.pstrycz.draysonhospitals.R;
 import com.pstrycz.draysonhospitals.database.HospitalContract.HospitalEntry;
 
 
-public class HospitalListAdapter extends CursorAdapter {
+public class HospitalCursorAdapter extends CursorAdapter {
 
-    public HospitalListAdapter(Context context, Cursor c, boolean autoRequery) {
+    public HospitalCursorAdapter(Context context, Cursor c, boolean autoRequery) {
         super(context, c, autoRequery);
     }
 

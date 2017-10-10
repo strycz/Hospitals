@@ -39,13 +39,19 @@ public class HospitalProvider extends ContentProvider {
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
+        Cursor cursor;
         int match = hUriMatcher.match(uri);
         switch (match) {
             case HOSPITALS:
-                return db.query(TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                cursor = db.query(TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                break;
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
+
+
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        return cursor;
     }
 
     @Nullable
@@ -76,6 +82,8 @@ public class HospitalProvider extends ContentProvider {
             Log.e(LOG_TAG, "Failed to insert row for " + uri);
             return null;
         }
+
+        getContext().getContentResolver().notifyChange(uri, null);
 
         return ContentUris.withAppendedId(uri, rowId);
     }

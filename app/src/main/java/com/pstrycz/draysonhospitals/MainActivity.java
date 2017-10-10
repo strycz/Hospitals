@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,10 +20,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.pstrycz.draysonhospitals.database.HospitalContract.HospitalEntry;
-import com.pstrycz.draysonhospitals.ui.HospitalListAdapter;
+import com.pstrycz.draysonhospitals.ui.HospitalCursorAdapter;
 import com.pstrycz.draysonhospitals.utils.Constants;
 
 import butterknife.BindView;
@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     ListView hospitalsListView;
     @BindView(R.id.empty_view)
     LinearLayout emptyView;
+    private HospitalCursorAdapter hospitalCursorAdapter;
 
     @OnClick(R.id.download_button)
     public void onDownloadButtonClick() {
@@ -54,8 +55,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         Cursor cursor = getContentResolver().query(HospitalEntry.CONTENT_URI, projection, null, null, null);
 
-        HospitalListAdapter hospitalListAdapter = new HospitalListAdapter(this, cursor, true);
-        hospitalsListView.setAdapter(hospitalListAdapter);
+        HospitalCursorAdapter hospitalCursorAdapter = new HospitalCursorAdapter(this, cursor, true);
+        hospitalsListView.setAdapter(hospitalCursorAdapter);
     }
 
     private boolean checkDownloadPermission() {
@@ -110,7 +111,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         setSupportActionBar(toolbar);
         hospitalsListView.setEmptyView(emptyView);
 
-        getLoaderManager().initLoader(LOADER_ID, null, this);
+        hospitalCursorAdapter = new HospitalCursorAdapter(this, null, true);
+        hospitalsListView.setAdapter(hospitalCursorAdapter);
+
+        getSupportLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     @Override
@@ -131,16 +135,23 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return null;
+        String[] projection = {HospitalEntry._ID, HospitalEntry.ORGANISATIONNAME, HospitalEntry.CITY};
+
+        switch (id) {
+            case LOADER_ID:
+                return new CursorLoader(this, HospitalEntry.CONTENT_URI, projection, null, null, null);
+            default:
+                return null;
+        }
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        hospitalCursorAdapter.swapCursor(cursor);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
+        hospitalCursorAdapter.swapCursor(null);
     }
 }
