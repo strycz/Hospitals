@@ -11,6 +11,9 @@ import android.widget.TextView;
 import com.pstrycz.draysonhospitals.R;
 import com.pstrycz.draysonhospitals.database.HospitalContract.HospitalEntry;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 public class HospitalCursorAdapter extends CursorAdapter {
 
@@ -20,18 +23,34 @@ public class HospitalCursorAdapter extends CursorAdapter {
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        return LayoutInflater.from(context).inflate(R.layout.simple_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.simple_item, parent, false);
+        ViewHolder viewHolder = new ViewHolder(view);
+        view.setTag(viewHolder);
+        return view;
     }
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        TextView name = view.findViewById(R.id.name);
-        TextView city = view.findViewById(R.id.city);
+        ViewHolder viewHolder = (ViewHolder) view.getTag();
+        viewHolder.bind(cursor);
+    }
 
-        String nameValue = cursor.getString(cursor.getColumnIndexOrThrow(HospitalEntry.ORGANISATIONNAME));
-        String cityValue = cursor.getString(cursor.getColumnIndexOrThrow(HospitalEntry.CITY));
+    static class ViewHolder {
+        @BindView(R.id.name)
+        TextView name;
+        @BindView(R.id.city)
+        TextView city;
 
-        name.setText(nameValue);
-        city.setText(cityValue);
+        public ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+
+        public void bind(Cursor cursor) {
+            String nameValue = cursor.getString(cursor.getColumnIndexOrThrow(HospitalEntry.ORGANISATIONNAME));
+            String cityValue = cursor.getString(cursor.getColumnIndexOrThrow(HospitalEntry.CITY));
+
+            name.setText(nameValue);
+            city.setText(cityValue);
+        }
     }
 }
