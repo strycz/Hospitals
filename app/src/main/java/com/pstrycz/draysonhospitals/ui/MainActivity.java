@@ -1,4 +1,4 @@
-package com.pstrycz.draysonhospitals;
+package com.pstrycz.draysonhospitals.ui;
 
 import android.Manifest;
 import android.app.DownloadManager;
@@ -23,9 +23,8 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.pstrycz.draysonhospitals.R;
 import com.pstrycz.draysonhospitals.database.HospitalContract.HospitalEntry;
-import com.pstrycz.draysonhospitals.ui.DetailsActivity;
-import com.pstrycz.draysonhospitals.ui.HospitalCursorAdapter;
 import com.pstrycz.draysonhospitals.utils.Constants;
 
 import butterknife.BindView;

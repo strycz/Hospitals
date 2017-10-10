@@ -12,16 +12,19 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import static com.pstrycz.draysonhospitals.database.HospitalContract.HospitalEntry.TABLE_NAME;
+import static com.pstrycz.draysonhospitals.database.HospitalContract.HospitalEntry;
 
 public class HospitalProvider extends ContentProvider {
 
     public static final int HOSPITALS = 100;
+    public static final int HOSPITAL_ID = 101;
 
     private static final String LOG_TAG = HospitalProvider.class.getSimpleName();
     private static final UriMatcher hUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
         hUriMatcher.addURI(HospitalContract.CONTENT_AUTHORITY, HospitalContract.PATH_HOSPITALS, HOSPITALS);
+        hUriMatcher.addURI(HospitalContract.CONTENT_AUTHORITY, HospitalContract.PATH_HOSPITALS + "/#", HOSPITAL_ID);
     }
 
     private HospitalDbHelper dbHelper;
@@ -43,6 +46,11 @@ public class HospitalProvider extends ContentProvider {
         int match = hUriMatcher.match(uri);
         switch (match) {
             case HOSPITALS:
+                cursor = db.query(TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                break;
+            case HOSPITAL_ID:
+                selection = HospitalEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 cursor = db.query(TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
             default:
