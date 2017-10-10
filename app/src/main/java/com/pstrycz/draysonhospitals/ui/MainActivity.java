@@ -19,9 +19,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.pstrycz.draysonhospitals.R;
 import com.pstrycz.draysonhospitals.database.HospitalContract.HospitalEntry;
@@ -43,6 +46,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     ListView hospitalsListView;
     @BindView(R.id.empty_view)
     LinearLayout emptyView;
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
+
     private HospitalCursorAdapter hospitalCursorAdapter;
 
     @OnClick(R.id.download_button)
@@ -53,12 +59,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     private void displayData() {
-        String[] projection = {HospitalEntry._ID, HospitalEntry.ORGANISATIONNAME, HospitalEntry.CITY};
-
-        Cursor cursor = getContentResolver().query(HospitalEntry.CONTENT_URI, projection, null, null, null);
-
-        HospitalCursorAdapter hospitalCursorAdapter = new HospitalCursorAdapter(this, cursor, true);
-        hospitalsListView.setAdapter(hospitalCursorAdapter);
+//        String[] projection = {HospitalEntry._ID, HospitalEntry.ORGANISATIONNAME, HospitalEntry.CITY};
+//
+//        Cursor cursor = getContentResolver().query(HospitalEntry.CONTENT_URI, projection, null, null, null);
+//
+//        HospitalCursorAdapter hospitalCursorAdapter = new HospitalCursorAdapter(this, cursor, true);
+//        hospitalsListView.setAdapter(hospitalCursorAdapter);
     }
 
     private boolean checkDownloadPermission() {
@@ -94,6 +100,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse("https://data.gov" + "" + "" + "" +
                 "" + ".uk/data/resource/nhschoices/Hospital.csv"));
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, Constants.CSV_NAME);
+
+        progressBar.setVisibility(View.VISIBLE);
         downloadManager.enqueue(request);
 
     }
@@ -160,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         hospitalCursorAdapter.swapCursor(cursor);
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override

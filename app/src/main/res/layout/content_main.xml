@@ -8,6 +8,15 @@
     tools:context="com.pstrycz.draysonhospitals.ui.MainActivity"
     tools:showIn="@layout/activity_main">
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentEnd="true"
+        tools:visibility="visible"
+        android:visibility="invisible" />
+
+
     <ListView
         android:id="@+id/hospitals_list_view"
         android:layout_width="wrap_content"
@@ -15,10 +24,10 @@
 
     <LinearLayout
         android:id="@+id/empty_view"
-        android:gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:gravity="center_horizontal"
         android:orientation="vertical">
 
         <ImageView
