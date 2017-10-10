@@ -25,6 +25,12 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ui.DetailsActivity"
+            android:label="@string/details_label"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".MainActivity"/>
+
         <receiver android:name=".broadcast.DownloadReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED" />
@@ -33,9 +39,9 @@
         </receiver>
 
         <provider
-            android:authorities="com.pstrycz.draysonhospitals"
             android:name=".database.HospitalProvider"
-            android:exported="false"/>
+            android:authorities="com.pstrycz.draysonhospitals"
+            android:exported="false" />
 
     </application>
 

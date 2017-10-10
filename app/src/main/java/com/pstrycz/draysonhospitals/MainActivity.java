@@ -2,6 +2,7 @@ package com.pstrycz.draysonhospitals;
 
 import android.Manifest;
 import android.app.DownloadManager;
+import android.content.ContentUris;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -18,10 +19,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.pstrycz.draysonhospitals.database.HospitalContract.HospitalEntry;
+import com.pstrycz.draysonhospitals.ui.DetailsActivity;
 import com.pstrycz.draysonhospitals.ui.HospitalCursorAdapter;
 import com.pstrycz.draysonhospitals.utils.Constants;
 
@@ -113,9 +116,19 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         hospitalCursorAdapter = new HospitalCursorAdapter(this, null, true);
         hospitalsListView.setAdapter(hospitalCursorAdapter);
+        hospitalsListView.setOnItemClickListener(onListItemClickListener);
 
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);
     }
+
+    AdapterView.OnItemClickListener onListItemClickListener = (adapterView, view, position, id) -> {
+        Intent intent = new Intent(this, DetailsActivity.class);
+
+        Uri currentPetUri = ContentUris.withAppendedId(HospitalEntry.CONTENT_URI, id);
+        intent.setData(currentPetUri);
+
+        startActivity(intent);
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

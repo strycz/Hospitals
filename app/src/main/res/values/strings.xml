@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">DraysonHospitals</string>
+    <string name="details_label">Hospital Details</string>
     <string name="action_settings">Settings</string>
     <string name="empty_view_title_text">no data yet...</string>
     <string name="empty_view_button_text">Download Hospitals Data</string>
