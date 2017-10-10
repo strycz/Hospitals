@@ -5,7 +5,7 @@
     tools:context=".CatalogActivity">
 
     <item
-        android:id="@+id/action_display_data"
-        android:title="Display Data"
+        android:id="@+id/action_show_filters"
+        android:title="Filters"
         app:showAsAction="never" />
 </menu>

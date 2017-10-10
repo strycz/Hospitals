@@ -21,7 +21,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -56,15 +55,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if (checkDownloadPermission()) {
             resumeDownload();
         }
-    }
-
-    private void displayData() {
-//        String[] projection = {HospitalEntry._ID, HospitalEntry.ORGANISATIONNAME, HospitalEntry.CITY};
-//
-//        Cursor cursor = getContentResolver().query(HospitalEntry.CONTENT_URI, projection, null, null, null);
-//
-//        HospitalCursorAdapter hospitalCursorAdapter = new HospitalCursorAdapter(this, cursor, true);
-//        hospitalsListView.setAdapter(hospitalCursorAdapter);
     }
 
     private boolean checkDownloadPermission() {
@@ -146,11 +136,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_display_data:
-                displayData();
+            case R.id.action_show_filters:
+                showFilters();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showFilters() {
+        FiltersDialogFragment newFragment = new FiltersDialogFragment();
+        newFragment.show(getSupportFragmentManager(), "filters");
     }
 
     @Override

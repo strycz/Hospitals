@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:paddingTop="32dp"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/subtype"
+        android:layout_width="@dimen/spinner_width"
+        android:layout_height="@dimen/spinner_height"
+        android:layout_margin="@dimen/spinner_margin"
+        android:background="@color/primaryWithAlpha" />
+
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/sector"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        android:background="@color/primaryWithAlpha" />
+
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/pims"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        android:background="@color/primaryWithAlpha" />
+</LinearLayout>
