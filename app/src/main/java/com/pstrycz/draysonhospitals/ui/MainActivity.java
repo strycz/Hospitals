@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.hospitalsListView)
+    @BindView(R.id.hospitals_list_view)
     ListView hospitalsListView;
     @BindView(R.id.empty_view)
     LinearLayout emptyView;
