@@ -18,6 +18,7 @@ public class HospitalProvider extends ContentProvider {
 
     public static final int HOSPITALS = 100;
     public static final int HOSPITAL_ID = 101;
+    public static final int SPINNERS = 102;
 
     private static final String LOG_TAG = HospitalProvider.class.getSimpleName();
     private static final UriMatcher hUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -25,6 +26,7 @@ public class HospitalProvider extends ContentProvider {
     static {
         hUriMatcher.addURI(HospitalContract.CONTENT_AUTHORITY, HospitalContract.PATH_HOSPITALS, HOSPITALS);
         hUriMatcher.addURI(HospitalContract.CONTENT_AUTHORITY, HospitalContract.PATH_HOSPITALS + "/#", HOSPITAL_ID);
+        hUriMatcher.addURI(HospitalContract.CONTENT_AUTHORITY, HospitalContract.PATH_SPINNER, SPINNERS);
     }
 
     private HospitalDbHelper dbHelper;
@@ -52,6 +54,9 @@ public class HospitalProvider extends ContentProvider {
                 selection = HospitalEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 cursor = db.query(TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                break;
+            case SPINNERS:
+                cursor = db.query(true, TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder, null);
                 break;
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);

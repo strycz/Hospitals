@@ -12,6 +12,7 @@ public final class HospitalContract {
     static final String CONTENT_AUTHORITY = "com.pstrycz.draysonhospitals";
     static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
     static final String PATH_HOSPITALS = "hospitals";
+    static final String PATH_SPINNER = "spinner";
 
     private HospitalContract() {
     }
@@ -19,6 +20,7 @@ public final class HospitalContract {
     public static final class HospitalEntry implements BaseColumns {
 
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_HOSPITALS);
+        public static final Uri SPINNER_CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_SPINNER);
 
         public final static String TABLE_NAME = "hospitals";
 

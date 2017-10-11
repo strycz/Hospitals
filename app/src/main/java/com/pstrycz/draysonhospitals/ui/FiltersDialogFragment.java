@@ -21,6 +21,10 @@ import butterknife.ButterKnife;
 
 public class FiltersDialogFragment extends DialogFragment {
 
+    public static final String SUBTYPE_BUNDLE_KEY = "SUBTYPE_BUNDLE_KEY";
+    public static final String SECTOR_BUNDLE_KEY = "SECTOR_BUNDLE_KEY";
+    public static final String PIMS_BUNDLE_KEY = "PIMS_BUNDLE_KEY";
+
     @BindView(R.id.subtype)
     Spinner subtype;
     @BindView(R.id.sector)
@@ -37,17 +41,21 @@ public class FiltersDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.dialog_filters, null);
         ButterKnife.bind(this, view);
 
-        List<String> list = new ArrayList<>();
-        list.add("1");
-        list.add("2");
-        list.add("3");
-        list.add("4");
-        list.add("5");
-        list.add("6");
+        ArrayList<String> spinner1 = getArguments().getStringArrayList(SUBTYPE_BUNDLE_KEY);
+        ArrayList<String> spinner2 = getArguments().getStringArrayList(SECTOR_BUNDLE_KEY);
+        ArrayList<String> spinner3 = getArguments().getStringArrayList(PIMS_BUNDLE_KEY);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, list);
-        adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
-        subtype.setAdapter(adapter);
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, spinner1);
+        adapter1.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
+        subtype.setAdapter(adapter1);
+
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, spinner2);
+        adapter2.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
+        sector.setAdapter(adapter2);
+
+        ArrayAdapter<String> adapter3 = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, spinner3);
+        adapter3.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
+        pims.setAdapter(adapter3);
 
         builder.setView(view).setPositiveButton("OK", (dialog, id) -> {
             //TODO

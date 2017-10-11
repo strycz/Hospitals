@@ -29,6 +29,9 @@ import com.pstrycz.draysonhospitals.R;
 import com.pstrycz.draysonhospitals.database.HospitalContract.HospitalEntry;
 import com.pstrycz.draysonhospitals.utils.Constants;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -98,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     public void showDownload() {
         Intent i = new Intent();
+
         i.setAction(DownloadManager.ACTION_VIEW_DOWNLOADS);
         startActivity(i);
     }
@@ -144,8 +148,37 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     private void showFilters() {
+
+        String[] subtypeProjection = {HospitalEntry.SUBTYPE};
+        Cursor cursor = getContentResolver().query(HospitalEntry.SPINNER_CONTENT_URI, subtypeProjection, null, null, null);
+        ArrayList<String> subtypeArray = new ArrayList<>();
+        while(cursor.moveToNext()){
+            subtypeArray.add(cursor.getString(0));
+        }
+
+        String[] sectorProjection = {HospitalEntry.SECTOR};
+        cursor = getContentResolver().query(HospitalEntry.SPINNER_CONTENT_URI, sectorProjection, null, null, null);
+        ArrayList<String> sectorArray = new ArrayList<>();
+        while(cursor.moveToNext()){
+            sectorArray.add(cursor.getString(0));
+        }
+
+        String[] pimsProjection = {HospitalEntry.ISPIMSMANAGED};
+        cursor = getContentResolver().query(HospitalEntry.SPINNER_CONTENT_URI, pimsProjection, null, null, null);
+        ArrayList<String> pimsArray = new ArrayList<>();
+        while(cursor.moveToNext()){
+            pimsArray.add(cursor.getString(0));
+        }
+
         FiltersDialogFragment newFragment = new FiltersDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putStringArrayList("SUBTYPE_BUNDLE_KEY", subtypeArray);
+        bundle.putStringArrayList("SECTOR_BUNDLE_KEY", sectorArray);
+        bundle.putStringArrayList("PIMS_BUNDLE_KEY", pimsArray);
+        newFragment.setArguments(bundle);
         newFragment.show(getSupportFragmentManager(), "filters");
+
+        cursor.close();
     }
 
     @Override
