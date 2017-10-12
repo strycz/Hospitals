@@ -52,6 +52,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     ProgressBar progressBar;
 
     private HospitalCursorAdapter hospitalCursorAdapter;
+    String[] loaderProjection = {HospitalEntry._ID, HospitalEntry.ORGANISATIONNAME, HospitalEntry.CITY};
+    String loaderSelection = null;
+    String[] loaderSelectionArgs = null;
 
     @OnClick(R.id.download_button)
     public void onDownloadButtonClick() {
@@ -178,11 +181,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String[] projection = {HospitalEntry._ID, HospitalEntry.ORGANISATIONNAME, HospitalEntry.CITY};
-
         switch (id) {
             case LOADER_ID:
-                return new CursorLoader(this, HospitalEntry.CONTENT_URI, projection, null, null, null);
+                return new CursorLoader(this, HospitalEntry.CONTENT_URI, loaderProjection, loaderSelection, loaderSelectionArgs, null);
             default:
                 return null;
         }
@@ -199,7 +200,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         hospitalCursorAdapter.swapCursor(null);
     }
 
-
     @Override
     public void onFilterPicked(String[] values) {
 
@@ -207,15 +207,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         String sector = values[1];
         String pims = values[2];
 
-        String selection = HospitalEntry.SUBTYPE + "=? AND " + HospitalEntry.SECTOR + "=? AND " + HospitalEntry
+        loaderSelection = HospitalEntry.SUBTYPE + "=? AND " + HospitalEntry.SECTOR + "=? AND " + HospitalEntry
                 .ISPIMSMANAGED + "=?";
 
-        String[] selectionArgs = new String[]{subtype, sector, pims};
+        loaderSelectionArgs = new String[]{subtype, sector, pims};
 
-        String[] projection = {HospitalEntry._ID, HospitalEntry.ORGANISATIONNAME, HospitalEntry.CITY};
-        Cursor cursor = getContentResolver().query(HospitalEntry.CONTENT_URI, projection, selection, selectionArgs,
-                null);
-
-        hospitalCursorAdapter.swapCursor(cursor);
+        getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 }
