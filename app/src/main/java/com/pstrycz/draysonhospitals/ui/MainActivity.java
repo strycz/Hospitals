@@ -25,11 +25,15 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import com.annimon.stream.Collectors;
+import com.annimon.stream.Stream;
 import com.pstrycz.draysonhospitals.R;
 import com.pstrycz.draysonhospitals.database.HospitalContract.HospitalEntry;
 import com.pstrycz.draysonhospitals.utils.Constants;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -150,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         Cursor cursor = getContentResolver().query(HospitalEntry.SPINNER_CONTENT_URI, subtypeProjection, null, null,
                 null);
         ArrayList<String> subtypeArray = new ArrayList<>();
+        subtypeArray.add("");
         while (cursor.moveToNext()) {
             subtypeArray.add(cursor.getString(0));
         }
@@ -157,6 +162,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         String[] sectorProjection = {HospitalEntry.SECTOR};
         cursor = getContentResolver().query(HospitalEntry.SPINNER_CONTENT_URI, sectorProjection, null, null, null);
         ArrayList<String> sectorArray = new ArrayList<>();
+        sectorArray.add("");
         while (cursor.moveToNext()) {
             sectorArray.add(cursor.getString(0));
         }
@@ -164,6 +170,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         String[] pimsProjection = {HospitalEntry.ISPIMSMANAGED};
         cursor = getContentResolver().query(HospitalEntry.SPINNER_CONTENT_URI, pimsProjection, null, null, null);
         ArrayList<String> pimsArray = new ArrayList<>();
+        pimsArray.add("");
         while (cursor.moveToNext()) {
             pimsArray.add(cursor.getString(0));
         }
@@ -207,10 +214,22 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         String sector = values[1];
         String pims = values[2];
 
-        loaderSelection = HospitalEntry.SUBTYPE + "=? AND " + HospitalEntry.SECTOR + "=? AND " + HospitalEntry
-                .ISPIMSMANAGED + "=?";
+        ArrayList<String> selectionArray = new ArrayList<>();
+        if(subtype!=""){
+            selectionArray.add(HospitalEntry.SUBTYPE + "=?");
+        }
+        if(sector!=""){
+            selectionArray.add(HospitalEntry.SECTOR+ "=?" );
+        }
+        if(pims!=""){
+            selectionArray.add(HospitalEntry.ISPIMSMANAGED+ "=?");
+        }
 
-        loaderSelectionArgs = new String[]{subtype, sector, pims};
+        loaderSelection = Stream.of(selectionArray).collect(Collectors.joining(" AND "));
+        loaderSelection = loaderSelection.equals("") ? null : loaderSelection;
+
+        List<String> collect = Stream.of(values).filter(i -> !i.equals("")).collect(Collectors.toList());
+        loaderSelectionArgs = collect.toArray(new String[0]);
 
         getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
     }
