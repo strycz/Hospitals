@@ -32,7 +32,6 @@ import com.pstrycz.draysonhospitals.database.HospitalContract.HospitalEntry;
 import com.pstrycz.draysonhospitals.utils.Constants;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -215,18 +214,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         String pims = values[2];
 
         ArrayList<String> selectionArray = new ArrayList<>();
-        if(subtype!=""){
+        if (!"".equals(subtype)) {
             selectionArray.add(HospitalEntry.SUBTYPE + "=?");
         }
-        if(sector!=""){
-            selectionArray.add(HospitalEntry.SECTOR+ "=?" );
+        if (!"".equals(sector)) {
+            selectionArray.add(HospitalEntry.SECTOR + "=?");
         }
-        if(pims!=""){
-            selectionArray.add(HospitalEntry.ISPIMSMANAGED+ "=?");
+        if (!"".equals(pims)) {
+            selectionArray.add(HospitalEntry.ISPIMSMANAGED + "=?");
         }
 
         loaderSelection = Stream.of(selectionArray).collect(Collectors.joining(" AND "));
-        loaderSelection = loaderSelection.equals("") ? null : loaderSelection;
 
         List<String> collect = Stream.of(values).filter(i -> !i.equals("")).collect(Collectors.toList());
         loaderSelectionArgs = collect.toArray(new String[0]);
