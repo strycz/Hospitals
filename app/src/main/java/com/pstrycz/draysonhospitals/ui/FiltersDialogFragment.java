@@ -8,13 +8,14 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.pstrycz.draysonhospitals.R;
+import com.pstrycz.draysonhospitals.database.HospitalContract.HospitalEntry;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +32,29 @@ public class FiltersDialogFragment extends DialogFragment {
     Spinner sector;
     @BindView(R.id.pims)
     Spinner pims;
+
+    FilterPickedListener filterListener;
+
+    public interface FilterPickedListener {
+        void onFilterPicked(String[] values);
+    }
+
+    AdapterView.OnItemSelectedListener filtersPickedListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            String subtypeValue = (String) subtype.getAdapter().getItem(subtype.getSelectedItemPosition());
+            String sectorValue = (String) sector.getAdapter().getItem(sector.getSelectedItemPosition());
+            String pimsValue = (String) pims.getAdapter().getItem(pims.getSelectedItemPosition());
+
+            String[] array = {subtypeValue, sectorValue, pimsValue};
+            filterListener.onFilterPicked(array);
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+    };
 
     @NonNull
     @Override
@@ -57,15 +81,28 @@ public class FiltersDialogFragment extends DialogFragment {
         adapter3.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
         pims.setAdapter(adapter3);
 
+        subtype.setOnItemSelectedListener(filtersPickedListener);
+
+        sector.setOnItemSelectedListener(filtersPickedListener);
+
+        pims.setOnItemSelectedListener(filtersPickedListener);
+
         builder.setView(view).setPositiveButton("OK", (dialog, id) -> {
-            //TODO
+            dismiss();
         });
+
         return builder.create();
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        try {
+            filterListener = (FilterPickedListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement proper interface");
+        }
     }
 
 }

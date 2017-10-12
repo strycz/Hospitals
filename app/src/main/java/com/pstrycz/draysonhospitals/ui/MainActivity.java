@@ -30,13 +30,13 @@ import com.pstrycz.draysonhospitals.database.HospitalContract.HospitalEntry;
 import com.pstrycz.draysonhospitals.utils.Constants;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,
+        FiltersDialogFragment.FilterPickedListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
+    //For API Level > 23
     private boolean checkDownloadPermission() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager
@@ -97,13 +98,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         progressBar.setVisibility(View.VISIBLE);
         downloadManager.enqueue(request);
 
-    }
-
-    public void showDownload() {
-        Intent i = new Intent();
-
-        i.setAction(DownloadManager.ACTION_VIEW_DOWNLOADS);
-        startActivity(i);
     }
 
     @Override
@@ -150,23 +144,24 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private void showFilters() {
 
         String[] subtypeProjection = {HospitalEntry.SUBTYPE};
-        Cursor cursor = getContentResolver().query(HospitalEntry.SPINNER_CONTENT_URI, subtypeProjection, null, null, null);
+        Cursor cursor = getContentResolver().query(HospitalEntry.SPINNER_CONTENT_URI, subtypeProjection, null, null,
+                null);
         ArrayList<String> subtypeArray = new ArrayList<>();
-        while(cursor.moveToNext()){
+        while (cursor.moveToNext()) {
             subtypeArray.add(cursor.getString(0));
         }
 
         String[] sectorProjection = {HospitalEntry.SECTOR};
         cursor = getContentResolver().query(HospitalEntry.SPINNER_CONTENT_URI, sectorProjection, null, null, null);
         ArrayList<String> sectorArray = new ArrayList<>();
-        while(cursor.moveToNext()){
+        while (cursor.moveToNext()) {
             sectorArray.add(cursor.getString(0));
         }
 
         String[] pimsProjection = {HospitalEntry.ISPIMSMANAGED};
         cursor = getContentResolver().query(HospitalEntry.SPINNER_CONTENT_URI, pimsProjection, null, null, null);
         ArrayList<String> pimsArray = new ArrayList<>();
-        while(cursor.moveToNext()){
+        while (cursor.moveToNext()) {
             pimsArray.add(cursor.getString(0));
         }
 
@@ -202,5 +197,25 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         hospitalCursorAdapter.swapCursor(null);
+    }
+
+
+    @Override
+    public void onFilterPicked(String[] values) {
+
+        String subtype = values[0];
+        String sector = values[1];
+        String pims = values[2];
+
+        String selection = HospitalEntry.SUBTYPE + "=? AND " + HospitalEntry.SECTOR + "=? AND " + HospitalEntry
+                .ISPIMSMANAGED + "=?";
+
+        String[] selectionArgs = new String[]{subtype, sector, pims};
+
+        String[] projection = {HospitalEntry._ID, HospitalEntry.ORGANISATIONNAME, HospitalEntry.CITY};
+        Cursor cursor = getContentResolver().query(HospitalEntry.CONTENT_URI, projection, selection, selectionArgs,
+                null);
+
+        hospitalCursorAdapter.swapCursor(cursor);
     }
 }
